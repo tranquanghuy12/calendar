@@ -1,56 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState, useContext, useEffect } from "react";
+import "./App.css";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { getMonth } from "./util";
+import SideBar from "./components/SideBar";
+import CalendarHeader from "./components/CalendarHeader";
+import Month from "./components/Month";
+import GlobalContext from "./context/GlobalContext";
+import dayjs from "dayjs";
+import EventModal from "./components/EventModal";
 
 function App() {
+  const [currentMonth, setCurrentMonth] = useState(getMonth());
+  const { monthIndex } = useContext(GlobalContext);
+
+  useEffect(() => {
+    setCurrentMonth(getMonth(monthIndex));
+  }, [monthIndex]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div>
+      <Box sx={{ flexGrow: 1, padding: "10px 50px", background: "#80808030" }}>
+        <Grid container spacing={2} sx={{ p: 4 }}>
+          <Grid
+            item
+            xs={6}
+            md={3}
+            sx={{ background: "white", border: "1px solid #80808030" }}
           >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
+            <SideBar month={currentMonth} />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            md={9}
+            sx={{ background: "white", border: "1px solid #80808030" }}
           >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+            <CalendarHeader />
+            <Month month={currentMonth} />
+            <EventModal />
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 }
