@@ -51,12 +51,16 @@ export default function TransitionsModal() {
     setDiscription(selectedEvent?.description);
   }, [selectedEvent]);
 
+  console.log(selectedEvent);
+
   const handleClose = () => {
     setOpenModal(false);
     setSelectedEvent(null);
+    setTitle("");
+    setDiscription("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const calendarEvent = {
       title,
@@ -66,9 +70,9 @@ export default function TransitionsModal() {
       id: selectedEvent ? selectedEvent.id : Date.now(),
     };
     if (selectedEvent) {
-      dispatchCalEvent({ type: "update", payload: calendarEvent });
+      await dispatchCalEvent({ type: "update", payload: calendarEvent });
     } else {
-      dispatchCalEvent({ type: "push", payload: calendarEvent });
+      await dispatchCalEvent({ type: "push", payload: calendarEvent });
     }
     handleClose();
   };
